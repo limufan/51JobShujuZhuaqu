@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="JobShujuZhuaquConsoleApplication.Data" assembly="51JobShujuZhuaquConsoleApplication">
+    <class name="ZhiweiDataModel" table="job_zhiwei">
+        <id name="Id" type="string" column="zhiwei_id"></id>
+        <property name="Name" type="string" column="zhiwei_name"/>
+        <property name="GongsiName" type="string" column="zhiwei_gongsiName"/>
+        <property name="GongzuoDidian" type="string" column="zhiwei_gongzuoDidian"/>
+        <property name="ZuidiGongzi" type="int" column="zhiwei_zuidiGongzi"/>
+        <property name="ZuigaoGongzi" type="int" column="zhiwei_zuigaoGongzi"/>
+        <property name="CreatedTime" type="DateTime" column="zhiwei_createdTime"/>
+        <property name="FabuTime" type="DateTime" column="zhiwei_fabuTime"/>
+        <property name="Lianjie" type="string" column="zhiwei_lianjie"/>
+        <property name="Mingxi" type="string" length="20000" column="zhiwei_mingxi"/>
+    </class>
+</hibernate-mapping>
