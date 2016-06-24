@@ -16,6 +16,7 @@ namespace JobShujuZhuaquConsoleApplication
 
         public void Zhuaqu(int pageCount, string urlFormat)
         {
+            Console.WriteLine("开始抓取");
             WebClient client = new WebClient();
             client.Encoding = Encoding.GetEncoding("GB2312");
             int page = 1;
@@ -31,7 +32,12 @@ namespace JobShujuZhuaquConsoleApplication
                     this.Save(zhiwei);
                 }
                 page ++;
+                if(page % 20 == 0)
+                {
+                    Console.WriteLine("抓取进度：" + page);
+                }
             }
+            Console.WriteLine("抓取完成");
 
         }
         public List<string> GetZhiweiContent(string body)
