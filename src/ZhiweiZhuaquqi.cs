@@ -17,13 +17,23 @@ namespace JobShujuZhuaquConsoleApplication
         public void Zhuaqu(int pageCount, string urlFormat)
         {
             Console.WriteLine("开始抓取");
+
             WebClient client = new WebClient();
             client.Encoding = Encoding.GetEncoding("GB2312");
             int page = 1;
             while(page <= pageCount)
             {
                 string url = string.Format(urlFormat, page);
-                byte[] data = client.DownloadData(url);
+                byte[] data = null;
+
+                try
+                {
+                    data = client.DownloadData(url);
+                }
+                catch
+                {
+                    data = client.DownloadData(url);
+                }
 
                 string body = Encoding.GetEncoding("GB2312").GetString(data);
                 List<string> zhiweiList = this.GetZhiweiContent(body);
@@ -32,7 +42,7 @@ namespace JobShujuZhuaquConsoleApplication
                     this.Save(zhiwei);
                 }
                 page ++;
-                if(page % 20 == 0)
+                if(page % 5 == 0)
                 {
                     Console.WriteLine("抓取进度：" + page);
                 }
@@ -150,10 +160,17 @@ namespace JobShujuZhuaquConsoleApplication
             content = content.Substring(content.IndexOf(">"));
             content = content.Substring(1, content.IndexOf("<") - 1);
             string gongziString = content.Split('-')[0].Trim();
-            int gongzi = 0;
-            int.TryParse(gongziString, out gongzi);
-
-            return gongzi;
+            double gongzi = 0;
+            double.TryParse(gongziString, out gongzi);
+            if(content.IndexOf("千") > -1)
+            {
+                gongzi = gongzi * 1000;
+            }
+            else if (content.IndexOf("万") > -1)
+            {
+                gongzi = gongzi * 10000;
+            }
+            return (int)gongzi;
         }
 
         private int GetZuigaoGongzi(string content)
@@ -161,14 +178,22 @@ namespace JobShujuZhuaquConsoleApplication
             content = content.Substring(content.IndexOf("class=\"t4\""));
             content = content.Substring(content.IndexOf(">"));
             content = content.Substring(1, content.IndexOf("<") - 1);
-            int gongzi = 0;
+            double gongzi = 0;
             if (content.IndexOf("-") != -1)
             {
-                string gongziString = content.Split('-')[1].Trim().TrimEnd("/月".ToArray());
-                int.TryParse(gongziString, out gongzi);
+                string gongziString = content.Split('-')[1].Trim().TrimEnd("千/月".ToArray()).TrimEnd("万/月".ToArray());
+                double.TryParse(gongziString, out gongzi);
             }
-
-            return gongzi;
+            
+            if (content.IndexOf("千") > -1)
+            {
+                gongzi = gongzi * 1000;
+            }
+            else if (content.IndexOf("万") > -1)
+            {
+                gongzi = gongzi * 10000;
+            }
+            return (int)gongzi;
         }
 
         private DateTime GetFabuTime(string content)
@@ -184,8 +209,6 @@ namespace JobShujuZhuaquConsoleApplication
 
         private string GetZhiweiLianjie(string content)
         {
-            Thread.Sleep(1000);
-
             content = content.Substring(content.IndexOf("http"));
             string url = content.Substring(0, content.IndexOf("\""));
 
@@ -194,13 +217,22 @@ namespace JobShujuZhuaquConsoleApplication
 
         private string GetZhiweiMingxi(string url)
         {
-            Thread.Sleep(1000);
+            string body = "";
+            try
+            {
 
-            WebClient client = new WebClient();
-            client.Encoding = Encoding.GetEncoding("GB2312");
-            byte[] data = client.DownloadData(url);
+                Thread.Sleep(1000);
 
-            string body = Encoding.GetEncoding("GB2312").GetString(data);
+                WebClient client = new WebClient();
+                client.Encoding = Encoding.GetEncoding("GB2312");
+                byte[] data = client.DownloadData(url);
+                body = Encoding.GetEncoding("GB2312").GetString(data);
+            }
+            catch
+            {
+                Console.WriteLine("获取信息失败：" + url);
+            }
+
             return body;
         }
     }
