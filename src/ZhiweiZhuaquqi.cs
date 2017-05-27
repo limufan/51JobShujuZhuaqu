@@ -20,6 +20,7 @@ namespace JobShujuZhuaquConsoleApplication
 
             WebClient client = new WebClient();
             client.Encoding = Encoding.GetEncoding("GB2312");
+            client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
             int page = 1;
             while(page <= pageCount)
             {
@@ -225,6 +226,7 @@ namespace JobShujuZhuaquConsoleApplication
 
                 WebClient client = new WebClient();
                 client.Encoding = Encoding.GetEncoding("GB2312");
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
                 byte[] data = client.DownloadData(url);
                 body = Encoding.GetEncoding("GB2312").GetString(data);
             }
