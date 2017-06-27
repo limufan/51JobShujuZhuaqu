@@ -18,15 +18,16 @@ namespace JobShujuZhuaquConsoleApplication
         {
             Console.WriteLine("开始抓取");
 
-            WebClient client = new WebClient();
-            client.Encoding = Encoding.GetEncoding("GB2312");
-            client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
             int page = 1;
             while(page <= pageCount)
             {
                 string url = string.Format(urlFormat, page);
                 byte[] data = null;
 
+                WebClient client = new WebClient();
+                client.Encoding = Encoding.GetEncoding("gb2312");
+                client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
+                client.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
                 try
                 {
                     data = client.DownloadData(url);
@@ -36,7 +37,7 @@ namespace JobShujuZhuaquConsoleApplication
                     data = client.DownloadData(url);
                 }
 
-                string body = Encoding.GetEncoding("GB2312").GetString(data);
+                string body = Encoding.GetEncoding("gb2312").GetString(data);
                 List<string> zhiweiList = this.GetZhiweiContent(body);
                 foreach (string zhiwei in zhiweiList)
                 {
@@ -225,10 +226,10 @@ namespace JobShujuZhuaquConsoleApplication
                 Thread.Sleep(1000);
 
                 WebClient client = new WebClient();
-                client.Encoding = Encoding.GetEncoding("GB2312");
+                client.Encoding = Encoding.GetEncoding("gb2312");
                 client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
                 byte[] data = client.DownloadData(url);
-                body = Encoding.GetEncoding("GB2312").GetString(data);
+                body = Encoding.GetEncoding("gb2312").GetString(data);
             }
             catch
             {
